@@ -9,7 +9,7 @@ from imblearn.over_sampling import SMOTE
 import joblib
 
 
-def load_data():
+def load_data() -> pd.DataFrame:
     df = pd.read_csv("data/parcel_delivery_dataset.csv")
     df.dropna(inplace=True)
     df["dates"] = pd.to_datetime(df["dates"])
@@ -19,7 +19,7 @@ def load_data():
 
     return df
 
-def train_model():
+def train_model() -> GridSearchCV:
     df = load_data()
 
     features = ["traffic_levels", "weather_conditions", "sequence_in_delivery", "is_weekend"]
@@ -69,4 +69,4 @@ def train_model():
 
 if __name__ == "__main__":
     model = train_model()
-    joblib.dump(model, '../models/parcel_delivery_model.pkl')
+    joblib.dump(model, 'models/parcel_delivery_model.pkl')
