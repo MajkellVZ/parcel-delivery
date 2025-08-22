@@ -1,0 +1,46 @@
+## Analysis of Delivery Time Windows
+
+
+### Temporal Factors
+
+Season and month do not appear to have a significant impact on when deliveries are scheduled.
+The distinction between weekdays and weekends is important.
+On weekdays, most deliveries occur in the afternoon, followed by the morning, and then the evening.
+On weekends, the order of preference shifts to morning, followed by afternoon, and then evening.
+
+
+### Delivery Characteristics
+
+Parcel size seems to have no effect on the time window. The order of popularity remains consistently afternoon, morning, and then evening.
+The overall distribution of deliveries is imbalanced, with a majority of deliveries taking place in the afternoon, followed by morning, and then evening.
+
+
+### Sequence in Delivery
+
+Morning deliveries show a wide range of sequence numbers, suggesting that morning routes are a mix of early and later stops.
+Afternoon deliveries have a higher median sequence number and a tighter distribution, indicating they are typically later stops within a delivery route.
+Evening deliveries have the highest median sequence number and the widest range, suggesting they are very late stops with high variability.
+The plots for Distance and Parcel Weights show no strong relationship, with values distributed similarly across all time windows.
+
+
+### Environmental Factors
+
+Traffic level has a noticeable impact.
+With low traffic, the most common time window is morning.
+With high or medium traffic, the most common time window is afternoon.
+Weather conditions also play a role.
+Foggy, rainy, and sunny weather all favor deliveries in the afternoon, followed by morning, and then evening.
+Only snowy conditions change the order, making afternoon the most popular, followed by the evening, and then the morning.
+
+
+## Conclusion
+
+The exploratory analysis reveals that while temporal factors like day of the week and traffic conditions significantly influence delivery time windows,
+other factors such as parcel size and distance do not show a strong relationship.
+The analysis suggests that optimizing delivery routes based on these insights could improve efficiency and customer satisfaction.
+The problem is suitable for multi-class classification, with the target variable being the delivery time window.
+The next step is to prepare the data for modeling and train a classification model to predict delivery time windows based on the identified features.
+Given the imbalanced nature of the target variable, techniques like oversampling will be employed to address this issue.
+The model will be trained using a pipeline that includes preprocessing, oversampling, and classification steps, with hyperparameter tuning to optimize performance.
+Random Forest Classifier will be used as the base model because of its interpretability and ability to handle categorical and numerical features effectively.
+The model will be evaluated using metrics such as F1-score, precision, and recall to ensure it performs well across all delivery time windows.

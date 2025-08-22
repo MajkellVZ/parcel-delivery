@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -26,8 +27,8 @@ def train_model() -> GridSearchCV:
     X = df[features]
     y = df["delivery_time_window"]
 
-    categorical = ["traffic_levels", "weather_conditions"]
-    numerical = ["sequence_in_delivery", "is_weekend"]
+    categorical = ["traffic_levels", "weather_conditions", "parcel_size"]
+    numerical = ["sequence_in_delivery", "is_weekend", "distance", "parcel_weights"]
 
     preprocessor = ColumnTransformer(
         transformers=[
@@ -48,6 +49,8 @@ def train_model() -> GridSearchCV:
         {
             "classifier__n_estimators": [100, 200, 300],
             "classifier__max_depth": [10, 20, None],
+            "classifier__min_samples_leaf": [1, 2, 4],
+            "classifier__min_samples_split": [2, 4],
         }
     ]
 
@@ -69,4 +72,6 @@ def train_model() -> GridSearchCV:
 
 if __name__ == "__main__":
     model = train_model()
+    if not os.path.isdir('models'):
+        os.makedirs('models')
     joblib.dump(model, 'models/parcel_delivery_model.pkl')
