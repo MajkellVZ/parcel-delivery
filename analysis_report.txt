@@ -37,10 +37,10 @@ Only snowy conditions change the order, making afternoon the most popular, follo
 
 The exploratory analysis reveals that while temporal factors like day of the week and traffic conditions significantly influence delivery time windows,
 other factors such as parcel size and distance do not show a strong relationship.
-The analysis suggests that optimizing delivery routes based on these insights could improve efficiency and customer satisfaction.
 The problem is suitable for multi-class classification, with the target variable being the delivery time window.
-The next step is to prepare the data for modeling and train a classification model to predict delivery time windows based on the identified features.
+The next step is to prepare the data, by removing the missing data and the outliers per target class, for modeling and train a classification model to predict delivery time windows based on the identified features.
 Given the imbalanced nature of the target variable, techniques like oversampling will be employed to address this issue.
 The model will be trained using a pipeline that includes preprocessing, oversampling, and classification steps, with hyperparameter tuning to optimize performance.
 Random Forest Classifier will be used as the base model because of its interpretability and ability to handle categorical and numerical features effectively.
 The model will be evaluated using metrics such as F1-score, precision, and recall to ensure it performs well across all delivery time windows.
+The model seems to fall a bit short in classifying the evening deliveries, which is likely due to the limited number of samples in that category and overlap with afternoon deliveries.

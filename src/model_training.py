@@ -20,15 +20,31 @@ def load_data() -> pd.DataFrame:
 
     return df
 
+def clean_outliers_per_group(
+    df: pd.DataFrame, group_col: str, num_cols: list[str]
+) -> pd.DataFrame:
+    def filter_group(group: pd.DataFrame) -> pd.DataFrame:
+        for col in num_cols:
+            q1 = group[col].quantile(0.25)
+            q3 = group[col].quantile(0.75)
+            iqr = q3 - q1
+            lower, upper = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+            group = group[(group[col] >= lower) & (group[col] <= upper)]
+        return group
+
+    return df.groupby(group_col, group_keys=False).apply(filter_group)
+
 def train_model() -> GridSearchCV:
     df = load_data()
 
     features = ["traffic_levels", "weather_conditions", "sequence_in_delivery", "is_weekend"]
-    X = df[features]
-    y = df["delivery_time_window"]
 
-    categorical = ["traffic_levels", "weather_conditions", "parcel_size"]
-    numerical = ["sequence_in_delivery", "is_weekend", "distance", "parcel_weights"]
+    categorical = ["traffic_levels", "weather_conditions"]
+    numerical = ["sequence_in_delivery", "is_weekend"]
+    df_clean = clean_outliers_per_group(df, "delivery_time_window", numerical)
+
+    X = df_clean[features]
+    y = df_clean["delivery_time_window"]
 
     preprocessor = ColumnTransformer(
         transformers=[
