@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import classification_report
@@ -34,7 +34,7 @@ def clean_outliers_per_group(
 
     return df.groupby(group_col, group_keys=False).apply(filter_group)
 
-def train_model() -> GridSearchCV:
+def train_model() -> RandomizedSearchCV:
     df = load_data()
 
     features = ["traffic_levels", "weather_conditions", "sequence_in_delivery", "is_weekend"]
@@ -74,16 +74,16 @@ def train_model() -> GridSearchCV:
         X, y, test_size=0.2, random_state=42, stratify=y
     )
 
-    grid_search = GridSearchCV(
-        pipe, param_grid, cv=5, scoring="f1_macro", n_jobs=-1, verbose=5
+    random_search = RandomizedSearchCV(
+        pipe, param_grid, cv=5, scoring="f1_macro", n_jobs=-1, verbose=5, n_iter=10
     )
-    grid_search.fit(X_train, y_train)
+    random_search.fit(X_train, y_train)
 
-    print("Best Parameters:", grid_search.best_params_)
-    y_pred = grid_search.predict(X_test)
+    print("Best Parameters:", random_search.best_params_)
+    y_pred = random_search.predict(X_test)
     print("\nClassification Report:\n", classification_report(y_test, y_pred))
 
-    return grid_search
+    return random_search
 
 
 if __name__ == "__main__":
