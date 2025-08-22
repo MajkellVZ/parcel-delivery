@@ -6,7 +6,7 @@
 ## Setup Instructions
 
 ```bash
-# 1. Download the project
+# 1. Download the project and go to the directory
 cd parcel-delivery
 
 # 2. Run script
