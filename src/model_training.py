@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, OrdinalEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
@@ -39,7 +39,8 @@ def train_model() -> RandomizedSearchCV:
 
     features = ["traffic_levels", "weather_conditions", "sequence_in_delivery", "is_weekend"]
 
-    categorical = ["traffic_levels", "weather_conditions"]
+    categorical_non_ordinal = ["weather_conditions"]
+    categorical_ordinal = ["traffic_levels"]
     numerical = ["sequence_in_delivery", "is_weekend"]
     df_clean = clean_outliers_per_group(df, "delivery_time_window", numerical)
 
@@ -48,7 +49,8 @@ def train_model() -> RandomizedSearchCV:
 
     preprocessor = ColumnTransformer(
         transformers=[
-            ("cat", OneHotEncoder(handle_unknown="ignore"), categorical),
+            ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_non_ordinal),
+            ("cat_ord", OrdinalEncoder(), categorical_ordinal),
             ("num", StandardScaler(), numerical),
         ]
     )
